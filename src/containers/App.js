@@ -14,21 +14,28 @@ export default class App extends Component {
 	generateQueries = () => {
 		let {character, maxCharLength, newCharacter} = this.state;
 		let charArr = character.split(' ');
-		 // ["happy c ol fantastic abc"] 15
-		 // ["happy OR c OR o oool", "fantastic", "abc"] 15
+
 		let elemNewChar = '';
 		charArr.map((item, id) => {
-			console.log("elemNewChar", elemNewChar);
 			let elLengh = elemNewChar.length, 
 				iLengh = item.length;
 
 			if (elemNewChar == '') {
-				if (item.length >= maxCharLength || item.length + 4 >= maxCharLength) {
+				if (iLengh >= maxCharLength || iLengh + 4 >= maxCharLength) {
 					newCharacter.push(item);
 				} else {
-					elemNewChar = item + " OR " ;
+					if (charArr[id+1]) {
+						if (iLengh + 4 + charArr[id+1].length > maxCharLength) {
+							newCharacter.push(item);
+						} else {
+							elemNewChar = item + " OR ";
+						}
+					} else {
+						newCharacter.push(item);
+					}
 				}
 			} else {
+					
 				if (elLengh + iLengh + 4 >= maxCharLength) {
 					elemNewChar = elemNewChar + item; 
 					newCharacter.push(elemNewChar);
@@ -43,7 +50,9 @@ export default class App extends Component {
 							elemNewChar = elemNewChar + item + " OR " ;
 						}
 					} else {
-						elemNewChar = elemNewChar + item + " OR " ;
+						elemNewChar = elemNewChar + item;
+						newCharacter.push(elemNewChar);
+						elemNewChar = '';
 					}
 				}
 			};
